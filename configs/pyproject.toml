@@ -2,7 +2,7 @@
 name = "contact-graspnet"
 version = "0.1.0"
 description = "Contact GraspNet PyTorch implementation with CUDA support"
-readme = "README.md"
+# readme = "README.md"  # Will be created during setup
 requires-python = ">=3.9"
 authors = [
     {name = "Contact GraspNet Team"},

@@ -68,6 +68,37 @@ echo "Setting cache directory to: $CACHE_DIR"
 # Copy requirements.txt to project
 cp "$PROJECT_ROOT/configs/requirements.txt" .
 
+# Create a basic README.md to satisfy pyproject.toml
+cat > README.md << 'EOF'
+# Contact GraspNet Environment
+
+This is an automatically generated Contact GraspNet environment set up with UV.
+
+## Activation
+
+```bash
+source .venv/bin/activate
+# or
+./activate.sh
+```
+
+## Directory Structure
+
+- `.venv/` - Virtual environment
+- `.cache/` - Local package cache
+- `src/` - Source code (downloaded separately)
+- `data/` - Datasets (downloaded separately)
+- `requirements.txt` - Python dependencies
+
+## Development
+
+Use `./develop.sh` to enter development mode with proper PYTHONPATH setup.
+
+## Cache Location
+
+Package cache is stored locally in `.cache/` to avoid filling home directory.
+EOF
+
 # Install dependencies
 echo "Installing dependencies..."
 echo "This may take a while, especially for PyTorch with CUDA support..."

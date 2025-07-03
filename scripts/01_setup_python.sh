@@ -71,21 +71,21 @@ if ! command -v pyenv &> /dev/null; then
     
     # Install pyenv
     if curl https://pyenv.run | bash; then
-        # Add pyenv to PATH and bashrc
-        export PYENV_ROOT="$HOME/.pyenv"
-        [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-        eval "$(pyenv init -)"
-        
-        # Add to bashrc if not already there
-        if ! grep -q 'pyenv init' ~/.bashrc; then
-            echo '' >> ~/.bashrc
-            echo '# Pyenv configuration' >> ~/.bashrc
-            echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
-            echo '[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
-            echo 'eval "$(pyenv init -)"' >> ~/.bashrc
-            echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.bashrc
-        fi
-        
+    # Add pyenv to PATH and bashrc
+    export PYENV_ROOT="$HOME/.pyenv"
+    [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+    eval "$(pyenv init -)"
+    
+    # Add to bashrc if not already there
+    if ! grep -q 'pyenv init' ~/.bashrc; then
+        echo '' >> ~/.bashrc
+        echo '# Pyenv configuration' >> ~/.bashrc
+        echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
+        echo '[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
+        echo 'eval "$(pyenv init -)"' >> ~/.bashrc
+        echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.bashrc
+    fi
+    
         print_success "Pyenv installed successfully"
     else
         print_error "Failed to install pyenv"
