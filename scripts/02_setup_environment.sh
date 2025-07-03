@@ -69,7 +69,7 @@ echo "This may take a while, especially for PyTorch with CUDA support..."
 
 # Install packages from requirements.txt
 echo "Installing all packages from requirements.txt..."
-uv pip install -r requirements.txt
+uv pip install --index-strategy unsafe-best-match -r requirements.txt
 
 # Verify PyTorch CUDA support
 echo "Verifying PyTorch installation..."
