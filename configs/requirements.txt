@@ -35,7 +35,7 @@ pyquaternion>=0.9.9
 python-fcl>=0.7.0
 
 # OpenGL and graphics
-pyopengl>=3.1.1
+pyopengl==3.1.0
 pyglet>=1.5.27
 
 # Machine learning and deep learning
