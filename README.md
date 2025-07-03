@@ -4,8 +4,14 @@ This repository provides a complete setup for the Contact GraspNet environment u
 
 ## One-Liner Installation
 
+**Standard installation:**
 ```bash
-curl -sSL https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/install.sh | bash
+curl -sSL https://raw.githubusercontent.com/Kyrylo-Shyvam/research-repo-setup/main/install.sh | bash
+```
+
+**Bypass caching (recommended for development):**
+```bash
+curl -sSL "https://raw.githubusercontent.com/Kyrylo-Shyvam/research-repo-setup/main/install.sh?$(date +%s)" | bash
 ```
 
 This will:
@@ -48,6 +54,32 @@ export HF_TOKEN="your_huggingface_token"
 export GITHUB_TOKEN="your_github_token"
 export DATASET_REPO="username/dataset-repo"  # HuggingFace dataset repo
 export CODE_REPO="username/code-repo"        # GitHub code repo
+```
+
+## Troubleshooting
+
+### Caching Issues
+If you get old versions of the script, use the cache-busting version:
+```bash
+curl -sSL "https://raw.githubusercontent.com/Kyrylo-Shyvam/research-repo-setup/main/install.sh?$(date +%s)" | bash
+```
+
+### 404 Errors
+If you see "404:: command not found", the script download failed. Try:
+1. Check if the repository is public or if you have access
+2. Verify the URL is correct
+3. Download manually first to check:
+```bash
+curl -sSL https://raw.githubusercontent.com/Kyrylo-Shyvam/research-repo-setup/main/install.sh -o test_install.sh
+head -10 test_install.sh  # Should show bash script, not HTML
+```
+
+### Locale Warnings
+To fix locale warnings, run:
+```bash
+export LC_ALL=C
+# or
+export LC_ALL=en_US.UTF-8
 ```
 
 ## Directory Structure

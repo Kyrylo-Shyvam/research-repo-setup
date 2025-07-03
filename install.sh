@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+# Fix locale issues
+export LC_ALL=C
+
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -80,13 +83,13 @@ if [ ${#MISSING_VARS[@]} -ne 0 ]; then
     echo "export CODE_REPO=\"username/code-repo\""
     echo ""
     echo "Then run this script again:"
-    echo "curl -sSL https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/install.sh | bash"
+    echo "curl -sSL \"https://raw.githubusercontent.com/Kyrylo-Shyvam/research-repo-setup/main/install.sh?\$(date +%s)\" | bash"
     exit 1
 fi
 
 # Create temporary directory for setup files
 TEMP_DIR=$(mktemp -d)
-REPO_URL="https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main"
+REPO_URL="https://raw.githubusercontent.com/Kyrylo-Shyvam/research-repo-setup/main"
 
 print_status "Downloading setup scripts..."
 
