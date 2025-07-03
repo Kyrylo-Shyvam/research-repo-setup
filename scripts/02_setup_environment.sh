@@ -56,6 +56,10 @@ cp "$PROJECT_ROOT/configs/pyproject.toml" .
 echo "Initializing UV project..."
 uv python pin 3.9
 
+# Create virtual environment
+echo "Creating virtual environment..."
+uv venv
+
 # Copy requirements.txt to project
 cp "$PROJECT_ROOT/configs/requirements.txt" .
 
