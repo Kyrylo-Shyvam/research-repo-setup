@@ -43,7 +43,7 @@ if [[ "$OSTYPE" != "linux-gnu"* ]]; then
 fi
 
 print_header "Contact GraspNet One-Liner Setup"
-print_status "This script will set up a complete Contact GraspNet environment using UV"
+print_status "This script will set up a complete Contact GraspNet environment using UV (No sudo required!)"
 
 # Check for required environment variables
 MISSING_VARS=()

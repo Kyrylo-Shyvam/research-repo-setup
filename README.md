@@ -15,12 +15,11 @@ curl -sSL "https://raw.githubusercontent.com/Kyrylo-Shyvam/research-repo-setup/m
 ```
 
 This will:
-1. Install pyenv (if not present)
-2. Install Python 3.9
-3. Install uv
-4. Set up the environment with all dependencies in `./contact_graspnet/`
-5. Download the dataset (requires HuggingFace token)
-6. Clone the code repository (requires GitHub token)
+1. Install Python 3.9 (via system Python, Miniconda, or pyenv - **no sudo required**)
+2. Install uv
+3. Set up the environment with all dependencies in `./contact_graspnet/`
+4. Download the dataset (requires HuggingFace token)
+5. Clone the code repository (requires GitHub token)
 
 ## Manual Installation
 
@@ -44,6 +43,17 @@ cd contact_graspnet
 - Linux system with GPU
 - HuggingFace token (for dataset access)
 - GitHub token (for private repository access)
+- **No sudo/root access required!**
+
+## Python Installation Strategy
+
+The setup uses a multi-strategy approach to install Python 3.9 without requiring sudo:
+
+1. **System Python**: Checks if Python 3.9 is already available on the system
+2. **Pyenv**: Installs pyenv and Python 3.9 (primary method)
+3. **Miniconda fallback**: Installs Miniconda in user space if pyenv fails
+
+This ensures the setup works in environments where you don't have administrative privileges.
 
 ## Environment Variables
 
@@ -82,13 +92,27 @@ export LC_ALL=C
 export LC_ALL=en_US.UTF-8
 ```
 
+### Python Installation Issues
+If Python 3.9 installation fails:
+
+1. **Miniconda installation failed**: Check internet connection and disk space
+2. **Pyenv build failed**: Install build dependencies manually:
+   ```bash
+   # Ubuntu/Debian
+   sudo apt-get install make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev git
+   
+   # CentOS/RHEL
+   sudo yum groupinstall 'Development Tools' && sudo yum install openssl-devel bzip2-devel libffi-devel
+   ```
+3. **Limited environment**: The script will try system Python first, so ensure Python 3.9 is available if you can't install additional software
+
 ## Directory Structure
 
 ```
 repo_setup/
 ├── install.sh              # One-liner installation script
 ├── scripts/
-│   ├── 01_setup_python.sh    # Install pyenv and Python 3.9
+│   ├── 01_setup_python.sh    # Install Python 3.9 (sudo-free: system/miniconda/pyenv)
 │   ├── 02_setup_environment.sh # Setup uv environment
 │   ├── 03_download_dataset.sh  # Download dataset from HuggingFace
 │   ├── 04_download_code.sh     # Download code from GitHub
