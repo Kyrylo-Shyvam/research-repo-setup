@@ -87,61 +87,53 @@ if [ ${#MISSING_VARS[@]} -ne 0 ]; then
     exit 1
 fi
 
-# Create temporary directory for setup files
-TEMP_DIR=$(mktemp -d)
+# Create setup directories in current directory
 REPO_URL="https://raw.githubusercontent.com/Kyrylo-Shyvam/research-repo-setup/main"
+
+print_status "Creating setup directories..."
+mkdir -p scripts configs
 
 print_status "Downloading setup scripts..."
 
 # Download all required scripts and configs
-curl -sSL "$REPO_URL/scripts/01_setup_python.sh" -o "$TEMP_DIR/01_setup_python.sh"
-curl -sSL "$REPO_URL/scripts/02_setup_environment.sh" -o "$TEMP_DIR/02_setup_environment.sh"
-curl -sSL "$REPO_URL/scripts/03_download_dataset.sh" -o "$TEMP_DIR/03_download_dataset.sh"
-curl -sSL "$REPO_URL/scripts/04_download_code.sh" -o "$TEMP_DIR/04_download_code.sh"
+curl -sSL "$REPO_URL/scripts/01_setup_python.sh" -o "scripts/01_setup_python.sh"
+curl -sSL "$REPO_URL/scripts/02_setup_environment.sh" -o "scripts/02_setup_environment.sh"
+curl -sSL "$REPO_URL/scripts/03_download_dataset.sh" -o "scripts/03_download_dataset.sh"
+curl -sSL "$REPO_URL/scripts/04_download_code.sh" -o "scripts/04_download_code.sh"
 
 # Download config files
-mkdir -p "$TEMP_DIR/configs"
-curl -sSL "$REPO_URL/configs/requirements.txt" -o "$TEMP_DIR/configs/requirements.txt"
-curl -sSL "$REPO_URL/configs/pyproject.toml" -o "$TEMP_DIR/configs/pyproject.toml"
+curl -sSL "$REPO_URL/configs/requirements.txt" -o "configs/requirements.txt"
+curl -sSL "$REPO_URL/configs/pyproject.toml" -o "configs/pyproject.toml"
 
 # Make scripts executable
-chmod +x "$TEMP_DIR"/*.sh
+chmod +x scripts/*.sh
 
 print_header "Step 1: Setting up Python 3.9 with pyenv"
-bash "$TEMP_DIR/01_setup_python.sh"
+bash scripts/01_setup_python.sh
 
 print_header "Step 2: Setting up UV environment"
-# Change to temp directory so scripts can find configs
-cd "$TEMP_DIR"
-bash "$TEMP_DIR/02_setup_environment.sh"
-
-# Change back to original directory and move the project
-cd -
-if [ -d "$TEMP_DIR/contact_graspnet" ]; then
-    mv "$TEMP_DIR/contact_graspnet" ./
-    print_status "Project created in: $(pwd)/contact_graspnet"
-fi
+bash scripts/02_setup_environment.sh
 
 print_header "Step 3: Downloading dataset from HuggingFace"
 if [ "$DATASET_REPO" != "contactgraspnet/dataset" ]; then
     cd contact_graspnet
-    bash "$TEMP_DIR/03_download_dataset.sh"
+    bash ../scripts/03_download_dataset.sh
     cd ..
 else
     print_warning "Skipping dataset download - using placeholder repository name"
     print_warning "Please update DATASET_REPO environment variable and run manually:"
-    print_warning "export DATASET_REPO=\"actual/repo-name\" && cd contact_graspnet && bash $TEMP_DIR/03_download_dataset.sh"
+    print_warning "export DATASET_REPO=\"actual/repo-name\" && cd contact_graspnet && bash ../scripts/03_download_dataset.sh"
 fi
 
 print_header "Step 4: Downloading code from GitHub"
 if [ "$CODE_REPO" != "username/contact-graspnet" ]; then
     cd contact_graspnet
-    bash "$TEMP_DIR/04_download_code.sh"
+    bash ../scripts/04_download_code.sh
     cd ..
 else
     print_warning "Skipping code download - using placeholder repository name"
     print_warning "Please update CODE_REPO environment variable and run manually:"
-    print_warning "export CODE_REPO=\"actual/repo-name\" && cd contact_graspnet && bash $TEMP_DIR/04_download_code.sh"
+    print_warning "export CODE_REPO=\"actual/repo-name\" && cd contact_graspnet && bash ../scripts/04_download_code.sh"
 fi
 
 print_header "Setup Complete!"
@@ -177,7 +169,8 @@ echo "  ./activate.sh    - Activate environment"
 echo "  ./run.sh <file>  - Run Python scripts"
 echo "  ./develop.sh     - Development environment"
 
-# Clean up
-rm -rf "$TEMP_DIR"
+# Clean up downloaded scripts (optional)
+print_status "Cleaning up setup files..."
+rm -rf scripts configs
 
 print_success "Installation completed! Happy coding! 🚀" 
