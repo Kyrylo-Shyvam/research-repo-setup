@@ -109,7 +109,8 @@ uv pip install --index-strategy unsafe-best-match --cache-dir "$CACHE_DIR" -r re
 
 # Verify PyTorch CUDA support
 echo "Verifying PyTorch installation..."
-uv run python -c "
+source .venv/bin/activate
+python -c "
 import torch
 print(f'PyTorch version: {torch.__version__}')
 print(f'CUDA available: {torch.cuda.is_available()}')
