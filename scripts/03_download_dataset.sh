@@ -20,15 +20,21 @@ if [ -z "$DATASET_REPO" ]; then
     echo "export DATASET_REPO=\"username/repo-name\""
 fi
 
-# Navigate to project directory
-PROJECT_DIR="$HOME/contact_graspnet"
-if [ ! -d "$PROJECT_DIR" ]; then
-    echo "Error: Project directory $PROJECT_DIR not found"
-    echo "Please run the environment setup script first"
+# Check if we're in the contact_graspnet directory or if it exists in current dir
+if [ -f "pyproject.toml" ] && [ -d ".venv" ]; then
+    # We're already in the project directory
+    PROJECT_DIR="$(pwd)"
+elif [ -d "contact_graspnet" ]; then
+    # Project exists in current directory
+    PROJECT_DIR="$(pwd)/contact_graspnet"
+    cd "$PROJECT_DIR"
+else
+    echo "Error: contact_graspnet project directory not found"
+    echo "Please run the environment setup script first or cd to the project directory"
     exit 1
 fi
 
-cd "$PROJECT_DIR"
+echo "Working in project directory: $PROJECT_DIR"
 
 # Initialize pyenv and activate virtual environment
 if command -v pyenv &> /dev/null; then
@@ -110,7 +116,7 @@ import os
 from pathlib import Path
 
 def verify_dataset():
-    dataset_path = Path('./data/dataset')
+    dataset_path = Path('./dataset')
     
     if not dataset_path.exists():
         print("❌ Dataset directory not found")
@@ -154,4 +160,4 @@ python verify_dataset.py
 echo ""
 echo "✅ Dataset download completed successfully!"
 echo "Dataset location: $PROJECT_DIR/data/dataset"
-echo "To verify dataset integrity later, run: python verify_dataset.py" 
+echo "To verify dataset integrity later, run: cd data && python verify_dataset.py" 

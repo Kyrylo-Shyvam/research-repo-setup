@@ -20,15 +20,21 @@ if [ -z "$CODE_REPO" ]; then
     echo "export CODE_REPO=\"username/repo-name\""
 fi
 
-# Navigate to project directory
-PROJECT_DIR="$HOME/contact_graspnet"
-if [ ! -d "$PROJECT_DIR" ]; then
-    echo "Error: Project directory $PROJECT_DIR not found"
-    echo "Please run the environment setup script first"
+# Check if we're in the contact_graspnet directory or if it exists in current dir
+if [ -f "pyproject.toml" ] && [ -d ".venv" ]; then
+    # We're already in the project directory
+    PROJECT_DIR="$(pwd)"
+elif [ -d "contact_graspnet" ]; then
+    # Project exists in current directory
+    PROJECT_DIR="$(pwd)/contact_graspnet"
+    cd "$PROJECT_DIR"
+else
+    echo "Error: contact_graspnet project directory not found"
+    echo "Please run the environment setup script first or cd to the project directory"
     exit 1
 fi
 
-cd "$PROJECT_DIR"
+echo "Working in project directory: $PROJECT_DIR"
 
 # Setup git with token authentication
 echo "Setting up Git authentication..."
@@ -174,4 +180,4 @@ echo "  ./run.sh <script>   - Run Python scripts"
 echo "  ./develop.sh        - Enter development environment"
 echo ""
 echo "To start developing:"
-echo "cd ~/contact_graspnet && ./develop.sh" 
+echo "cd $PROJECT_DIR && ./develop.sh" 

@@ -29,13 +29,20 @@ print_header() {
 
 print_header "Contact GraspNet Setup Verification"
 
-# Check if project directory exists
-PROJECT_DIR="$HOME/contact_graspnet"
-if [ -d "$PROJECT_DIR" ]; then
-    print_success "Project directory exists: $PROJECT_DIR"
+# Check if project directory exists in current directory or if we're in it
+if [ -f "pyproject.toml" ] && [ -d ".venv" ]; then
+    # We're already in the project directory
+    PROJECT_DIR="$(pwd)"
+    print_success "Already in project directory: $PROJECT_DIR"
+elif [ -d "contact_graspnet" ]; then
+    # Project exists in current directory
+    PROJECT_DIR="$(pwd)/contact_graspnet"
+    print_success "Project directory found: $PROJECT_DIR"
     cd "$PROJECT_DIR"
 else
-    print_error "Project directory not found: $PROJECT_DIR"
+    print_error "Project directory not found. Looking for:"
+    print_error "  - contact_graspnet/ in current directory"
+    print_error "  - or pyproject.toml + .venv in current directory"
     exit 1
 fi
 
@@ -144,5 +151,5 @@ echo ""
 echo "If all checks passed, your Contact GraspNet environment is ready!"
 echo ""
 echo "To get started:"
-echo "  cd ~/contact_graspnet"
+echo "  cd $(basename "$PROJECT_DIR")"
 echo "  ./develop.sh" 

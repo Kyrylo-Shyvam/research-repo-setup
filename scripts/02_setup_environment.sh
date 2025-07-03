@@ -3,9 +3,9 @@ set -e
 
 echo "=== Setting up UV environment ==="
 
-# Get the directory of this script
+# Get the directory of this script and project root
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 
 # Initialize pyenv if available
 if command -v pyenv &> /dev/null; then
@@ -37,9 +37,8 @@ fi
 # Ensure we have uv in PATH
 export PATH="$HOME/.cargo/bin:$PATH"
 
-# Create project directory
+# Create project directory in current working directory
 PROJECT_NAME="contact_graspnet"
-cd "$HOME"
 
 if [ -d "$PROJECT_NAME" ]; then
     echo "Project directory $PROJECT_NAME already exists, removing..."
@@ -50,40 +49,22 @@ echo "Creating new project: $PROJECT_NAME"
 mkdir -p "$PROJECT_NAME"
 cd "$PROJECT_NAME"
 
-# Create pyproject.toml
-cat > pyproject.toml << 'EOF'
-[project]
-name = "contact-graspnet"
-version = "0.1.0"
-description = "Contact GraspNet PyTorch implementation"
-requires-python = ">=3.9"
-dependencies = []
-
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-
-[tool.uv]
-dev-dependencies = []
-EOF
+# Copy pyproject.toml from configs
+cp "$PROJECT_ROOT/configs/pyproject.toml" .
 
 # Initialize uv project
 echo "Initializing UV project..."
 uv python pin 3.9
 
 # Copy requirements.txt to project
-cp "$PROJECT_DIR/configs/requirements.txt" .
+cp "$PROJECT_ROOT/configs/requirements.txt" .
 
 # Install dependencies
 echo "Installing dependencies..."
 echo "This may take a while, especially for PyTorch with CUDA support..."
 
-# Install packages in chunks to handle potential memory issues
-echo "Installing PyTorch packages first..."
-uv add torch==2.0.1+cu117 torchvision==0.15.2+cu117 torchaudio==2.0.2+cu117 --extra-index-url https://download.pytorch.org/whl/cu117
-
-# Install remaining packages
-echo "Installing remaining packages..."
+# Install packages from requirements.txt
+echo "Installing all packages from requirements.txt..."
 uv pip install -r requirements.txt
 
 # Verify PyTorch CUDA support
@@ -115,5 +96,5 @@ chmod +x activate.sh
 echo "✅ Environment setup completed successfully!"
 echo ""
 echo "To activate the environment, run:"
-echo "cd ~/contact_graspnet && source .venv/bin/activate"
-echo "Or use the convenience script: cd ~/contact_graspnet && ./activate.sh" 
+echo "cd contact_graspnet && source .venv/bin/activate"
+echo "Or use the convenience script: cd contact_graspnet && ./activate.sh" 
