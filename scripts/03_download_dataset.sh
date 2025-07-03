@@ -44,11 +44,18 @@ if command -v pyenv &> /dev/null; then
 fi
 
 export PATH="$HOME/.cargo/bin:$PATH"
+
+# Activate virtual environment and ensure we're using the correct python/pip
+echo "Activating virtual environment..."
 source .venv/bin/activate
+
+# Verify we're in the virtual environment
+echo "Using Python: $(which python)"
+echo "Using pip: $(which pip)"
 
 # Install huggingface_hub if not already installed
 echo "Ensuring huggingface_hub is available..."
-python -c "import huggingface_hub" 2>/dev/null || pip install huggingface_hub
+python -c "import huggingface_hub" 2>/dev/null || python -m pip install huggingface_hub
 
 # Create data directory
 mkdir -p data
