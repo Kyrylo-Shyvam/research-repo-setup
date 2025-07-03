@@ -60,6 +60,11 @@ uv python pin 3.9
 echo "Creating virtual environment..."
 uv venv
 
+# Set up local cache directory to avoid filling home directory
+CACHE_DIR="$PWD/.cache"
+mkdir -p "$CACHE_DIR"
+echo "Setting cache directory to: $CACHE_DIR"
+
 # Copy requirements.txt to project
 cp "$PROJECT_ROOT/configs/requirements.txt" .
 
@@ -67,9 +72,9 @@ cp "$PROJECT_ROOT/configs/requirements.txt" .
 echo "Installing dependencies..."
 echo "This may take a while, especially for PyTorch with CUDA support..."
 
-# Install packages from requirements.txt
+# Install packages from requirements.txt with local cache
 echo "Installing all packages from requirements.txt..."
-uv pip install --index-strategy unsafe-best-match -r requirements.txt
+uv pip install --index-strategy unsafe-best-match --cache-dir "$CACHE_DIR" -r requirements.txt
 
 # Verify PyTorch CUDA support
 echo "Verifying PyTorch installation..."
@@ -93,12 +98,32 @@ export PYTHONPATH="$PWD:$PYTHONPATH"
 echo "Contact GraspNet environment activated!"
 echo "Python: $(which python)"
 echo "Project directory: $PWD"
+echo "Cache directory: $PWD/.cache"
 EOF
 
 chmod +x activate.sh
+
+# Create .gitignore to exclude cache and venv directories
+cat > .gitignore << 'EOF'
+# Virtual environment
+.venv/
+
+# Local cache directory
+.cache/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Jupyter notebook checkpoints
+.ipynb_checkpoints/
+EOF
 
 echo "✅ Environment setup completed successfully!"
 echo ""
 echo "To activate the environment, run:"
 echo "cd contact_graspnet && source .venv/bin/activate"
-echo "Or use the convenience script: cd contact_graspnet && ./activate.sh" 
+echo "Or use the convenience script: cd contact_graspnet && ./activate.sh"
+echo ""
+echo "📁 Cache files are stored locally in: $PWD/.cache" 
