@@ -1,0 +1,60 @@
+# Stable requirements for Contact GraspNet environment
+# PyTorch with CUDA support
+--extra-index-url https://download.pytorch.org/whl/cu117
+
+# Core PyTorch packages (pinned versions for stability)
+torch==2.0.1+cu117
+torchvision==0.15.2+cu117
+torchaudio==2.0.2+cu117
+
+# Core scientific computing
+numpy==1.24.3
+scipy==1.10.1
+pandas==2.0.3
+scikit-learn==1.3.0
+h5py==3.9.0
+
+# Computer vision and 3D processing
+opencv-python==4.8.0.74
+open3d==0.17.0
+pillow==10.0.0
+imageio==2.31.1
+trimesh==3.23.1
+pyrender==0.1.45
+
+# Visualization
+matplotlib==3.7.2
+plotly==5.15.0
+
+# 3D math and geometry
+pyquaternion==0.9.9
+
+# OpenGL and graphics
+pyopengl==3.1.0
+pyglet==1.5.27
+
+# Machine learning tools
+tensorboard==2.13.0
+tensorboardx==2.6.2.2
+
+# Jupyter support
+jupyter==1.0.0
+ipykernel==6.25.0
+ipython==8.14.0
+ipywidgets==8.0.7
+notebook==7.0.2
+
+# Utilities
+click==8.1.6
+pyyaml==6.0.1
+requests==2.31.0
+tqdm==4.65.0
+
+# Data processing
+bottleneck==1.3.7
+numexpr==2.8.4
+networkx==3.1
+joblib==1.3.1
+
+# Development tools
+cython==3.0.0
